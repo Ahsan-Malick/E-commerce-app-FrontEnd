@@ -11,8 +11,8 @@ export default function SignUpAuth() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => data;
-
+  const onSubmit = (data) => console.log(data);
+  
   const [pass, setPass] = useState();
   const [check, setCheck] = useState();
 
@@ -78,23 +78,7 @@ export default function SignUpAuth() {
                     <p className="text-red-600"> {errors.email.message}</p>
                   )}
                 </div>
-                <p
-                  className="text-blue-500 underline cursor-pointer"
-                  onClick={()=>toggleDetails()}
-                >
-                  Password guide
-                </p>
-                {showDetails && (
-                  <div className="bg-gray-100 p-4 border border-gray-300 mt-2">
-                    <p>Include the following in your password:</p>
-                    <ul className="list-disc pl-4">
-                      <li>At least 8 characters</li>
-                      <li>Uppercase and lowercase letters</li>
-                      <li>Numbers</li>
-                      <li>Special characters</li>
-                    </ul>
-                  </div>
-                )}
+            
               </div>
 
               <div>
@@ -122,6 +106,23 @@ export default function SignUpAuth() {
                   {errors.password && (
                     <p className="text-red-600">{errors.password.message}</p>
                   )}
+                      <p
+                  className="text-blue-500 underline cursor-pointer"
+                  onClick={()=>toggleDetails()}
+                >
+                  Password guide
+                </p>
+                {showDetails && (
+                  <div className="bg-gray-100 p-4 border border-gray-300 mt-2">
+                    <p>Include the following in your password:</p>
+                    <ul className="list-disc pl-4">
+                      <li>At least 8 characters</li>
+                      <li>Uppercase and lowercase letters</li>
+                      <li>Numbers</li>
+                      <li>Special characters</li>
+                    </ul>
+                  </div>
+                )}
                 </div>
                 {/* Confirm Password */}
                 <div>
