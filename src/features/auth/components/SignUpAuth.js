@@ -1,36 +1,33 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { createUserAsync } from "../AuthSlice";
+import { selectLoggedUsers } from "../AuthSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SignUpAuth() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
-  
-  const [pass, setPass] = useState();
-  const [check, setCheck] = useState();
-
-  const handlePass = (e) => {
-    setPass(e.target.value);
-  };
+  const user = useSelector(selectLoggedUsers);
+  const dispatch = useDispatch();
+  const onSubmit = (data) => dispatch(createUserAsync({email: data.email, password: data.password}));
 
   const validatePassword = (value) => {
     // Add your custom password validation logic here
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
     return passwordRegex.test(value);
   };
 
-    const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
-    const toggleDetails = () => {
-      setShowDetails(!showDetails);
-    };
+  const toggleDetails = () => {
+    setShowDetails(!showDetails);
+  };
 
   return (
     <div>
@@ -78,7 +75,6 @@ export default function SignUpAuth() {
                     <p className="text-red-600"> {errors.email.message}</p>
                   )}
                 </div>
-            
               </div>
 
               <div>
@@ -101,28 +97,28 @@ export default function SignUpAuth() {
                     })}
                     type="password"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    onChange={(e) => handlePass(e)}
                   />
+
                   {errors.password && (
                     <p className="text-red-600">{errors.password.message}</p>
                   )}
-                      <p
-                  className="text-blue-500 underline cursor-pointer"
-                  onClick={()=>toggleDetails()}
-                >
-                  Password guide
-                </p>
-                {showDetails && (
-                  <div className="bg-gray-100 p-4 border border-gray-300 mt-2">
-                    <p>Include the following in your password:</p>
-                    <ul className="list-disc pl-4">
-                      <li>At least 8 characters</li>
-                      <li>Uppercase and lowercase letters</li>
-                      <li>Numbers</li>
-                      <li>Special characters</li>
-                    </ul>
-                  </div>
-                )}
+                  <p
+                    className="text-blue-500 underline cursor-pointer"
+                    onClick={() => toggleDetails()}
+                  >
+                    Password guide
+                  </p>
+                  {showDetails && (
+                    <div className="bg-gray-100 p-4 border border-gray-300 mt-2">
+                      <p>Include the following in your password:</p>
+                      <ul className="list-disc pl-4">
+                        <li>At least 8 characters</li>
+                        <li>Uppercase and lowercase letters</li>
+                        <li>Numbers</li>
+                        <li>Special characters</li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
                 {/* Confirm Password */}
                 <div>
@@ -139,8 +135,9 @@ export default function SignUpAuth() {
                       id="confirmPassword"
                       {...register("confirmPassword", {
                         required: "Confirm password is required",
-                        validate: (value) =>
-                          value === pass || "Password does not match",
+                        validate: (value, formValues) =>
+                          value === formValues.password ||
+                          "Password does not match",
                       })}
                       type="password"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
