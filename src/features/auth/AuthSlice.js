@@ -67,7 +67,6 @@ export const userSlice = createSlice({
       .addCase(checkUserAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.LoggedInUser = action.payload;
-        console.log(state.LoggedInUser)
       })
       .addCase(checkUserAsync.rejected, (state, action) => {
         state.status = "idle";

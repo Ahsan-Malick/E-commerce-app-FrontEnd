@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Stacklist from '../features/stacklist/Stacklist'
+import NavBar from '../features/product/NavBar'
 
 const products = [
     {
@@ -29,7 +30,8 @@ const products = [
 
 function Checkout() {
     return (
-        <> <div className='grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <> <NavBar> </NavBar>
+        <div className='grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
             <div className='lg:col-span-3 bg-slate-300 px-10'>
                 <div>
                     <div className="border-b border-gray-900/10 pb-12">
@@ -300,6 +302,7 @@ function Checkout() {
                 </div>
             </div>
         </div>
+       
         </>
     )
 }

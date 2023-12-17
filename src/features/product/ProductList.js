@@ -34,52 +34,11 @@ import {
   fetchCategoryAsync,
   fetchOneProductAsync,
 } from "./productListSlice";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ITEMS_PER_PAGE } from "../../app/constant";
 
-// function myFunction(){
 
-//   // const[check, newCheck]=useState(false)
-//   if(check==false){
-//     newCheck(true)
-//   }
-//   else{
-//     newCheck(false)
-//   }
-//   return check
-// }
 
-const oldProducts = [
-  {
-    id: 1,
-    name: "Basic Tee 6-Pack",
-    thumbnail:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  {
-    id: 2,
-    name: "Basic Tee 2",
-    href: "#",
-    thumbnail:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$45",
-    color: "Black",
-  },
-  {
-    id: 3,
-    name: "Basic Tee 3",
-    href: "#",
-    thumbnail:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$55",
-    color: "Black",
-  },
-];
 const sortOptions = [
   {
     name: "Best Rating",
@@ -111,7 +70,7 @@ const subCategories = [
   { name: "Laptop Sleeves", href: "#" },
 ];
 
-// const products = [
+
 //   {
 //     id: 1,
 //     title: "iPhone 9",
@@ -296,6 +255,8 @@ export default function ProductList() {
   const totalItems = useSelector(selectItems);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const dispatch = useDispatch();
+ 
+
   const [filter, setFilter] = useState({});
   const [html, setHtml] = useState(1);
   const [sort, setSort] = useState({});
@@ -334,11 +295,8 @@ export default function ProductList() {
   };
 
   const HandlePagination = (e) => {
-
-      let pagin = { _page: +e.target.innerHTML, _limit: ITEMS_PER_PAGE };
-      setPaginate(pagin);
-   
-   
+    let pagin = { _page: +e.target.innerHTML, _limit: ITEMS_PER_PAGE };
+    setPaginate(pagin);
   };
 
   const handlePage = (e) => {
@@ -348,9 +306,9 @@ export default function ProductList() {
   };
   const handlePageChange = (direction) => {
     let newPage;
-    if (direction === 'Next') {
+    if (direction === "Next") {
       newPage = page < totalPages.length ? page + 1 : 1;
-    } else if (direction === 'Previous') {
+    } else if (direction === "Previous") {
       newPage = page > 1 ? page - 1 : totalPages.length;
     }
     let pagin = { _page: newPage, _limit: ITEMS_PER_PAGE };
@@ -358,10 +316,7 @@ export default function ProductList() {
     setPaginate(pagin);
   };
 
-  const handleFetch = (id)=>{
 
-    dispatch(fetchOneProductAsync())
-  };
   useEffect(() => {
     dispatch(fetchproductsbyfiltersAsync({ filter, sort, paginate })); //filter etc are passed as a prop
   }, [dispatch, filter, sort, page]);
@@ -370,6 +325,10 @@ export default function ProductList() {
     dispatch(fetchBrandsAsync());
     dispatch(fetchCategoryAsync());
   }, []);
+  // useEffect(() => {
+  //   dispatch(fetchOneProductAsync({id}));
+  //   console.log('working', { id });
+  // }, [dispatch, products.id]);
 
   return (
     <>
@@ -660,11 +619,11 @@ export default function ProductList() {
                           {/* Customers also purchased */}
                         </h2>
 
-                        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8" >
+                        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                           {products.map((product) => (
-                            <Link to={`/ProductDetail/${product.id}`}>
+                            <Link to={`/ProductDetail/${product.id}`} key={product.id}>
                               <div
-                                key={product.id}
+                                
                                 className="group relative border-2 p-2"
                               >
                                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
@@ -757,7 +716,8 @@ export default function ProductList() {
                 aria-label="Pagination"
               >
                 <a
-                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0" onClick={()=>handlePageChange('Previous')}
+                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                  onClick={() => handlePageChange("Previous")}
                 >
                   <span className="sr-only">Previous</span>
                   <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
@@ -782,7 +742,7 @@ export default function ProductList() {
                 <a
                   className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 cursor-pointer"
                   onClick={() => {
-                    handlePageChange('Next');
+                    handlePageChange("Next");
                   }}
                 >
                   <span className="sr-only">Next</span>
