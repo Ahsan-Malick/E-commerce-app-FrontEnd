@@ -5,7 +5,7 @@ import { selectAllProducts, selectOneProduct } from "../productListSlice";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOneProductAsync } from "../productListSlice";
-import { addtoCartAsync } from "../../cart/cartSlice";
+import { addtoCartAsync, postItemAsync, selectCartItems } from "../../cart/cartSlice";
 import { selectLoggedUsers } from "../../auth/AuthSlice";
 
 // const product = {
@@ -70,6 +70,7 @@ export default function ProductDetail() {
 
   const product = useSelector(selectOneProduct);
   const user = useSelector(selectLoggedUsers);
+  const items = useSelector(selectCartItems)
   const param = useParams();
   const dispatch = useDispatch();
   const [selectedColor, setSelectedColor] = useState("yellow");
@@ -77,13 +78,14 @@ export default function ProductDetail() {
   
   const handleCart = (e,product)=>{
     e.preventDefault()
-    dispatch(addtoCartAsync({...product, quantity:1, user: user.id}))
-    // console.log({...product, quantity:1, user: user.id})
+    dispatch(postItemAsync({...product, quantity:1, user: user.id}));
+    // dispatch(addtoCartAsync());
+    console.log({...product, quantity:1, user: user.id})
   }
  
   useEffect(() => {
     dispatch(fetchOneProductAsync(param.id));
-    console.log('working',param.id)
+    
   }, [dispatch, param.id]);
 
   return (
@@ -345,7 +347,7 @@ export default function ProductDetail() {
 
                   <button
                     type="submit"
-                    className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" onClick={(e)=>handleCart(e,product)}
+                    className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" onClick={(e)=>{handleCart(e,product)}}
                   >
                     Add to cart
                   </button>

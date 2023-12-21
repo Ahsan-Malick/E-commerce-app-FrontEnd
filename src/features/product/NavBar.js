@@ -3,6 +3,8 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import ProductList from './ProductList';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addtoCartAsync } from '../cart/cartSlice';
 
 const user = {
   name: 'Tom Cook',
@@ -28,6 +30,10 @@ function classNames(...classes) {
 }
 
 export default function NavBar({children}) {
+  const dispatch = useDispatch()
+  const handleShowCart=()=>{
+    // dispatch(addtoCartAsync())
+  }
   return (
     <>
       {/*
@@ -78,6 +84,7 @@ export default function NavBar({children}) {
                       <button
                         type="button"
                         className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        onClick={()=>handleShowCart()}
                       >
                         <span className="absolute -inset-1.5" />
                     

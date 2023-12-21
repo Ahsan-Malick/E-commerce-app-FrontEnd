@@ -685,7 +685,51 @@
       "email": "ahsan@ymail.com",
       "password": "Ahsan1!",
       "id": 1
+    },
+    {
+      "email": "ahsan@yamail.com",
+      "password": "Ahsan2!",
+      "id": 2
     }
   ],
-  "cart": []
+  "cart": [
+    {
+      "id": 3,
+      "title": "Samsung Universe 9",
+      "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
+      "price": 1249,
+      "discountPercentage": 15.46,
+      "rating": 4.09,
+      "stock": 36,
+      "brand": "Samsung",
+      "category": "smartphones",
+      "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
+      "images": [
+        "https://i.dummyjson.com/data/products/3/1.jpg"
+      ],
+      "quantity": 1,
+      "user": 2
+    },
+    {
+      "id": 11,
+      "title": "Hyaluronic Acid Serum",
+      "description": "L'OrÃ©al Paris introduces Hyaluron Expert Replumping Serum formulated with 1.5% Hyaluronic Acid",
+      "price": 19,
+      "discountPercentage": 13.31,
+      "rating": 4.83,
+      "stock": 110,
+      "brand": "L'Oreal Paris",
+      "category": "skincare",
+      "thumbnail": "https://i.dummyjson.com/data/products/16/thumbnail.jpg",
+      "images": [
+        "https://i.dummyjson.com/data/products/16/1.png",
+        "https://i.dummyjson.com/data/products/16/2.webp",
+        "https://i.dummyjson.com/data/products/16/3.jpg",
+        "https://i.dummyjson.com/data/products/16/4.jpg",
+        "https://i.dummyjson.com/data/products/16/thumbnail.jpg"
+      ],
+      "quantity": 1,
+      "user": 2
+    }
+  ]
 }

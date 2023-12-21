@@ -1,28 +1,28 @@
 import React from "react";
 
-export function CartAPI(cartData) {
+export function PostCartItems(cartData) {
   return new Promise(async (resolve) => {
-    const data = await checkIfCartItemExists(cartData);
-    if (data) {
-      console.log('it is if')
-      resolve({data});
-      
-    }
-    else{
+    const user = await checkIfCartItemExists(cartData)
+    if(!user){
     const response = await fetch("http://localhost:8080/cart", {
       method: "POST",
       body: JSON.stringify(cartData),
       headers: { "Content-Type": "application/json" },
     });
     const data = await response.json();
-    console.log('it is else')
     resolve({ data });
+  } else {
+    resolve();
   }
   });
 }
 
+
+
+
 async function checkIfCartItemExists(cartData) {
   try {
+    if(cartData){
     const response = await fetch("http://localhost:8080/cart");
     const cartItems = await response.json();
 
@@ -30,10 +30,19 @@ async function checkIfCartItemExists(cartData) {
     const existingCartItem = cartItems.find((item) => item.id === cartData.id);
 
     return existingCartItem;
+    }
   } catch (error) {
     console.error("Error checking existing cart items:", error);
     throw error;
   }
+}
+
+export function cartByUser(id){
+  return new Promise (async(resolve)=>{
+    const response = await fetch(`http://localhost:8080/cart?user=${id}`)
+    const data = await response.json();
+    resolve({data})
+  })
 }
 
 export function CartUpdate(update) {
