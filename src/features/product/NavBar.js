@@ -30,20 +30,9 @@ function classNames(...classes) {
 }
 
 export default function NavBar({children}) {
-  const dispatch = useDispatch()
-  const handleShowCart=()=>{
-    // dispatch(addtoCartAsync())
-  }
+
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
@@ -84,7 +73,7 @@ export default function NavBar({children}) {
                       <button
                         type="button"
                         className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                        onClick={()=>handleShowCart()}
+                      
                       >
                         <span className="absolute -inset-1.5" />
                     
