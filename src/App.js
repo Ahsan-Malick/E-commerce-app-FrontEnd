@@ -18,7 +18,13 @@ import Protected from "./features/auth/components/Protected";
 import { useDispatch, useSelector } from "react-redux";
 import { selectLoggedUsers } from "./features/auth/AuthSlice";
 import { fetchCartByUserAsync } from "./features/cart/cartSlice";
-import { fetchaddressebyidAsync, saveaddressesAsync, selectAddresses } from "./features/stacklist/stacklistSlice";
+import {
+  fetchaddressebyidAsync,
+  saveaddressesAsync,
+  selectAddresses,
+} from "./features/stacklist/stacklistSlice";
+import OrderPage from "./features/order/order";
+import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -62,12 +68,23 @@ const router = createBrowserRouter([
       </Protected>
     ),
   },
+  {
+    path: "/order",
+    element: (
+      <Protected>
+        <OrderPage></OrderPage>
+      </Protected>
+    ),
+  },
+  {
+    path: "*",
+    element: <NotFound></NotFound>
+  },
 ]);
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedUsers);
-  
 
   useEffect(() => {
     if (user) {
@@ -75,7 +92,6 @@ function App() {
       dispatch(fetchaddressebyidAsync(user.id));
     }
   }, [dispatch, user]);
-
 
   return (
     <div className="App">

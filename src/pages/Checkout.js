@@ -1,13 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Stacklist from "../features/stacklist/Stacklist";
 import { useForm } from "react-hook-form";
 import NavBar from "../features/product/NavBar";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCartAsync, selectCartItems, updateCartAsync } from "../features/cart/cartSlice";
-import { saveaddressesAsync } from "../features/stacklist/stacklistSlice";
+import {
+  deleteCartAsync,
+  selectCartItems,
+  updateCartAsync,
+} from "../features/cart/cartSlice";
+import {
+  saveaddressesAsync,
+  selectAddresses,
+} from "../features/stacklist/stacklistSlice";
 import { selectLoggedUsers } from "../features/auth/AuthSlice";
+import { getorderdetailAsync } from "../features/order/orderSlice";
 
 // const products = [
 //     {
@@ -33,11 +41,21 @@ import { selectLoggedUsers } from "../features/auth/AuthSlice";
 //     },
 //     // More products...
 // ]
+export const Context = React.createContext();
 
 function Checkout() {
   const dispatch = useDispatch();
   const products = useSelector(selectCartItems);
-  const user = useSelector(selectLoggedUsers)
+  const user = useSelector(selectLoggedUsers);
+  const persondetail = useSelector(selectAddresses);
+  const [selectedAddress, setSelectedAddress] = useState([]);
+  const [errormsg, setErrorMsg] = useState(null);
+  const [alertmsg, setAlertMsg] = useState(false);
+
+
+  // const { id: productId, ...productWithoutId } =
+  //   products.length > 0 ? products[0] : {};
+
   const {
     register,
     handleSubmit,
@@ -46,23 +64,62 @@ function Checkout() {
     formState: { errors },
   } = useForm();
 
-const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
+  const onSubmit = (data) =>
+    dispatch(saveaddressesAsync({ ...data, user: user.id }));
 
   const [qty, setQty] = useState(1);
+  const [payment, setPayment] = useState(false);
+  console.log(payment);
   const handleQty = (e, product) => {
     dispatch(updateCartAsync({ ...product, quantity: +e.target.value }));
     setQty(e.target.value);
+  };
+  const orderData = {
+    Address: selectedAddress,
+    productdetail: products,
+    payment: payment,
   };
 
   const handleDelete = (id) => {
     dispatch(deleteCartAsync(id));
   };
- 
+
+  const handlePayment = (e) => {
+    setPayment(e.target.id);
+  };
+
+  const handleOrder = () => {
+    if (Object.keys(selectedAddress).length > 0 && products.length > 0 && payment) {
+      dispatch(getorderdetailAsync(orderData));
+    } 
+  };
+
+  const showAlert=()=>{
+    const missingInfo = [];
+      if (!Object.keys(selectedAddress).length > 0) {
+        missingInfo.push("address");
+      }
+      if (!products.length > 0) {
+        missingInfo.push("items in cart");
+      }
+      if (!payment) {
+        missingInfo.push("payment method");
+      }
+      setErrorMsg(missingInfo.join());
+      let newAlert = !alertmsg
+      setAlertMsg(newAlert)
+  }
+  useEffect(() => {
+    if (errormsg) {
+      alert(`You have missing: ${errormsg}`);
+    }
+  }, [errormsg, alertmsg]);
+
 
   const handleReset = () => {
     // Reset the entire form
     reset();
-  }
+  };
 
   return (
     <>
@@ -78,7 +135,10 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                 Use a permanent address where you can receive mail.
               </p>
 
-              <form className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6" onSubmit={handleSubmit(onSubmit)}>
+              <form
+                className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
+                onSubmit={handleSubmit(onSubmit)}
+              >
                 <div className="sm:col-span-3">
                   <label
                     htmlFor="first-name"
@@ -91,7 +151,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                       type="text"
                       name="first-name"
                       id="first-name"
-                      {...register("firstname", {require: "Required"})}
+                      {...register("firstname", { require: "Required" })}
                       autoComplete="given-name"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
@@ -109,7 +169,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                     <input
                       type="text"
                       name="last-name"
-                      {...register("lastname", {require: "Required"})}
+                      {...register("lastname", { require: "Required" })}
                       id="last-name"
                       autoComplete="family-name"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -154,7 +214,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                     <select
                       id="country"
                       name="country"
-                      {...register("country",{required: "required"})}
+                      {...register("country", { required: "required" })}
                       autoComplete="country-name"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                     >
@@ -195,7 +255,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                     <input
                       type="text"
                       name="city"
-                      {...register("city",{required: "Required"})}
+                      {...register("city", { required: "Required" })}
                       id="city"
                       autoComplete="address-level2"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -233,7 +293,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                     <input
                       type="text"
                       name="postal-code"
-                      {...register("postcode",{required:"Required"})}
+                      {...register("postcode", { required: "Required" })}
                       id="postal-code"
                       autoComplete="postal-code"
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -242,7 +302,8 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                   <div className="mt-6 flex items-center justify-end gap-x-6">
                     <button
                       type="button"
-                      className="text-sm font-semibold leading-6 text-gray-900" onClick={handleReset}
+                      className="text-sm font-semibold leading-6 text-gray-900"
+                      onClick={handleReset}
                     >
                       Reset
                     </button>
@@ -264,7 +325,9 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
               <p className="mt-1 text-sm leading-6 text-gray-600">
                 Choose from existing addresses
               </p>
-              <Stacklist></Stacklist>
+              <Context.Provider value={[selectedAddress, setSelectedAddress]}>
+                <Stacklist></Stacklist>
+              </Context.Provider>
               <div className="mt-10 space-y-10">
                 <fieldset>
                   <legend className="text-sm font-semibold leading-6 text-gray-900">
@@ -278,6 +341,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                         name="payment"
                         type="radio"
                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        onClick={(e) => handlePayment(e)}
                       />
                       <label
                         htmlFor="push-everything"
@@ -292,6 +356,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                         name="payment"
                         type="radio"
                         className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        onClick={(e) => handlePayment(e)}
                       />
                       <label
                         htmlFor="push-email"
@@ -312,7 +377,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
             <div className="mt-8">
               <div className="flow-root">
                 <ul role="list" className="-my-6 divide-y divide-gray-200">
-                  {products.map((product) => (
+                  {products&&products.map((product) => (
                     <li key={product.id} className="flex py-6">
                       <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                         <img
@@ -326,9 +391,13 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                         <div>
                           <div className="flex justify-between text-base font-medium text-gray-900">
                             <h3>
-                              <a className="font-semibold" href={product.href}>{product.title}</a>
+                              <a className="font-semibold" href={product.href}>
+                                {product.title}
+                              </a>
                             </h3>
-                            <p className="ml-4 font-semibold">£{product.price}</p>
+                            <p className="ml-4 font-semibold">
+                              £{product.price}
+                            </p>
                           </div>
                           <p className="mt-1 text-sm text-gray-500">
                             {product.color}
@@ -337,7 +406,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                         <div className="flex flex-1 items-end justify-between text-sm">
                           <div className="text-gray-500">
                             Qty
-                            <select onChange={(e)=>handleQty(e,product)}>
+                            <select onChange={(e) => handleQty(e, product)}>
                               <option value="1">1</option>
                               <option value="2">2</option>
                               <option value="3">3</option>
@@ -349,7 +418,8 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                           <div className="flex">
                             <button
                               type="button"
-                              className="font-medium text-indigo-600 hover:text-indigo-500" onClick={()=>handleDelete(product.id)}
+                              className="font-medium text-indigo-600 hover:text-indigo-500"
+                              onClick={() => handleDelete(product.id)}
                             >
                               Remove
                             </button>
@@ -365,7 +435,7 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
             <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
               <div className="flex justify-between text-base font-medium text-gray-900">
                 <p>Subtotal</p>
-                {products.length > 0 ? (
+                {products&&products.length > 0 ? (
                   <p className="font-semibold">
                     £{products.reduce((sum, prod) => sum + prod.price, 0) * qty}
                   </p>
@@ -377,12 +447,23 @@ const onSubmit = (data)=>dispatch(saveaddressesAsync({...data, id:user.id}))
                 Shipping and taxes calculated at checkout.
               </p>
               <div className="mt-6">
-                <Link
-                  to="/pay"
-                  className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                >
-                  Pay Now
-                </Link>
+                {
+                Object.keys(selectedAddress).length > 0 &&
+                products.length > 0 &&
+                payment ? (
+                  <Link
+                    to="/order"
+                    className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                    onClick={() => handleOrder()}
+                  >
+                    Order Now
+                  </Link>
+                ) : (
+                  <div className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700" onClick={() => showAlert(errormsg)
+                  }>
+                    Order Now
+                  </div>
+                )}
               </div>
               <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                 <p>

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteaddressAsync, selectAddresses } from "./stacklistSlice";
+import { useState } from "react";
+import { Context } from "../../pages/Checkout";
 
-// const address = [
+// const address = [ 
 //     {
 //         name: 'Leslie Alexander',
 //         street: '12 losinga road',
@@ -26,8 +28,22 @@ function Stacklist() {
 
   const handleDelete = (id) => {
     dispatch(deleteaddressAsync(id));
-    console.log(id)
   };
+
+  const [selectedAddress, setSelectedAddress] = useContext(Context);
+
+  const handleRadioClick = (address) => {
+    setSelectedAddress({
+      "firstname": address.firstname,
+      "lastname": address.lastname,
+      "street": address.street,
+      "city": address.city,
+      "postcode": address.postcode,
+      "country": address.country,
+    });
+  };
+
+
   return (
     <fieldset>
       {address.map((address) => (
@@ -37,7 +53,7 @@ function Stacklist() {
               id={address.name}
               name="address"
               type="radio"
-              className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600 "
+              className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600" onClick={()=>handleRadioClick(address)}
             />
             <span>
               <p className="text-sm font-semibold leading-6 text-gray-900">{`${address.firstname} ${address.lastname}`}</p>

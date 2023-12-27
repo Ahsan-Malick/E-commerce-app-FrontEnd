@@ -1,6 +1,6 @@
 export function fetchAddressbyid(id) {
   return new Promise(async (resolve, reject) => {
-    const response = await fetch(`http://localhost:8080/addresses?id=${id}`);
+    const response = await fetch(`http://localhost:8080/addresses?user=${id}`);
     const data = await response.json();
     resolve({ data });
   });
@@ -20,7 +20,7 @@ export function fetchAddresses(addressData) {
       const data = await response.json();
       resolve({ data });
     } else {
-      resolve({ dataAd });
+      resolve();
     }
   });
 }

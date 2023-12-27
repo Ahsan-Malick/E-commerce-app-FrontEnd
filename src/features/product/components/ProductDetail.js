@@ -76,11 +76,16 @@ export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState("yellow");
   const [selectedSize, setSelectedSize] = useState("medium");
   
+  // const { id: productId, ...productWithoutId } =
+  //  product&&Object.keys(product).length > 0 ? product: {};
+   const { id: productId, ...productWithoutId } = 
+   product&&Object.keys(product).length > 0 ? product: {};
+
+
   const handleCart = (e,product)=>{
     e.preventDefault()
-    dispatch(postItemAsync({...product, quantity:1, user: user.id}));
-    // dispatch(addtoCartAsync());
-    console.log({...product, quantity:1, user: user.id})
+    dispatch(postItemAsync({...productWithoutId, quantity:1, user: user.id}));
+    alert('item added to cart successfully!')
   }
  
   useEffect(() => {

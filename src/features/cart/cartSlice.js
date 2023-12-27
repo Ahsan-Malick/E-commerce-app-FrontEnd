@@ -6,6 +6,7 @@ import {
   CartUpdate,
   cartByUser,
   PostCartItems,
+  CartReset,
 } from "./cartAPI";
 
 const initialState = {
@@ -51,6 +52,15 @@ export const deleteCartAsync = createAsyncThunk(
   "cart/updatedelete",
   async (id) => {
     const response = await CartDelete(id);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+
+export const resetCartAsync = createAsyncThunk(
+  "cart/resetCart",
+  async (id) => {
+    const response = await CartReset(id);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -120,7 +130,15 @@ export const cartSlice = createSlice({
           (items) => items.id === action.payload.itemid
         );
         state.CartItems.splice(index, 1);
-      });
+      })
+      .addCase(resetCartAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(resetCartAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.CartItems = action.payload;
+      })
+      ;
   },
 });
 
