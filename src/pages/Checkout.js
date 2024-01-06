@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Stacklist from "../features/stacklist/Stacklist";
@@ -41,6 +41,9 @@ import { getorderdetailAsync } from "../features/order/orderSlice";
 //     },
 //     // More products...
 // ]
+
+
+
 export const Context = React.createContext();
 
 function Checkout() {
@@ -53,8 +56,8 @@ function Checkout() {
   const [alertmsg, setAlertMsg] = useState(false);
 
 
-  // const { id: productId, ...productWithoutId } =
-  //   products.length > 0 ? products[0] : {};
+  const { id: productId, user: userId, ...productWithoutId } =
+    products.length > 0 ? products[0] : {};
 
   const {
     register,
@@ -69,16 +72,18 @@ function Checkout() {
 
   const [qty, setQty] = useState(1);
   const [payment, setPayment] = useState(false);
-  console.log(payment);
   const handleQty = (e, product) => {
     dispatch(updateCartAsync({ ...product, quantity: +e.target.value }));
     setQty(e.target.value);
   };
-  const orderData = {
+  const orderData =  {
     Address: selectedAddress,
-    productdetail: products,
+    productdetail: productWithoutId,
     payment: payment,
+    user: user.id
   };
+
+  // export const orderInfo = createContext(orderData);
 
   const handleDelete = (id) => {
     dispatch(deleteCartAsync(id));

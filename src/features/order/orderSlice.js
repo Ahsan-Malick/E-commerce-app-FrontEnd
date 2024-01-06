@@ -1,17 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchOrderDetail } from "./orderAPI";
+import { fetchOrderDetail, fetchOrderDetailByUser } from "./orderAPI";
 
 const initialState = {
   orderdetail: [],
   status: "idle",
   orderstate: false,
-  error:null
+  error: null,
 };
 
 export const getorderdetailAsync = createAsyncThunk(
   "order/getorderdetail",
   async (data) => {
     const response = await fetchOrderDetail(data);
+    return response.data;
+  }
+);
+
+export const getorderdetailbyuserAsync = createAsyncThunk(
+  "order/getorderdetailbyuser",
+  async (id) => {
+    const response = await fetchOrderDetailByUser(id);
     return response.data;
   }
 );
@@ -45,12 +53,21 @@ export const orderSlice = createSlice({
       })
       .addCase(getorderdetailAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.orderdetail = action.payload
-        state.orderstate = true
-      }).addCase(getorderdetailAsync.rejected, (state, action) => {
+        state.orderdetail = action.payload;
+        state.orderstate = true;
+      })
+      .addCase(getorderdetailAsync.rejected, (state, action) => {
         state.status = "idle";
-        state.error = action.error
-        });
+        state.error = action.error;
+      })
+      .addCase(getorderdetailbyuserAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getorderdetailbyuserAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.orderdetail = action.payload;
+        state.orderstate = true;
+      });
   },
 });
 
@@ -60,7 +77,6 @@ export const { increment, decrement, incrementByAmount } = orderSlice.actions;
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectOrderDetail = (state) => state.order.orderdetail;
-
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.

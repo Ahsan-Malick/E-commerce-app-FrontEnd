@@ -3,13 +3,17 @@ import { Link } from "react-router-dom";
 import { resetCartAsync, selectCartItems } from "../cart/cartSlice";
 import { useEffect } from "react";
 import { selectLoggedUsers } from "../auth/AuthSlice";
+import { getorderdetailbyuserAsync } from "./orderSlice";
 
 export default function Order({ orderNo }) {
   const user = useSelector(selectLoggedUsers);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {dispatch(resetCartAsync(user.id))}, [dispatch, user.id]);
+  useEffect(() => {
+    dispatch(resetCartAsync(user.id));
+    dispatch(getorderdetailbyuserAsync(user.id));
+  }, [dispatch, user.id]);
 
   return (
     <>

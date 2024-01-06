@@ -20,16 +20,20 @@ const navigation = [
   // { name: 'Reports', href: '#', current: false },
 ]
 const userNavigation = [
-  { name: 'Your Profile', link: '/' },
-  { name: 'Settings', link: '#' },
-  { name: 'Sign out', link: '/signin' },
-]
+  { name: 'My Profile', link: '/profile' },
+  { name: 'My Orders', link: '/ordersdetail' },
+  { name: 'Sign out', link: '/Logout' },``
+]  
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function NavBar({children}) {
+
+  const handleSignOut =()=>{
+    console.log('signed out')
+  }
 
   return (
     <>
@@ -103,7 +107,7 @@ export default function NavBar({children}) {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-start">
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
@@ -184,6 +188,8 @@ export default function NavBar({children}) {
                       <Link
                        to={item.link}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+
+                        onClick={item.name==="Sign out"? handleSignOut():console.log('inside')}
                       >
                         {item.name}
                       </Link>

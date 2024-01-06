@@ -47,8 +47,8 @@ export const userSlice = createSlice({
       state.value -= 1;
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
+    LoggedOut: (state, action) => {
+      state.LoggedInUser = action.payload;
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -76,7 +76,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { increment, decrement, incrementByAmount } = userSlice.actions;
+export const { increment, decrement, LoggedOut } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

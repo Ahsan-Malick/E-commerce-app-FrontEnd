@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import "./App.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -25,7 +25,14 @@ import {
 } from "./features/stacklist/stacklistSlice";
 import OrderPage from "./features/order/order";
 import NotFound from "./pages/NotFound";
+import OrdersDetail from "./features/order/orderDetail";
+import {
+  getorderdetailAsync,
+  getorderdetailbyuserAsync,
+} from "./features/order/orderSlice";
 
+import UserProfile from "./features/profile/profile";
+import Logout from "./pages/Logout";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -78,11 +85,29 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <NotFound></NotFound>
+    element: <NotFound></NotFound>,
+  },
+  {
+    path: "/ordersdetail",
+    element: <OrdersDetail></OrdersDetail>,
+  },
+  {
+    path: "/profile",
+    element: <UserProfile></UserProfile>,
+  },
+  {
+    path: "/logout",
+    element: (
+      <Protected>
+        <Logout></Logout>
+      </Protected>
+    ),
   },
 ]);
 
 function App() {
+  // const orderData = useContext()
+
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedUsers);
 
@@ -90,6 +115,7 @@ function App() {
     if (user) {
       dispatch(fetchCartByUserAsync(user.id));
       dispatch(fetchaddressebyidAsync(user.id));
+      dispatch(getorderdetailbyuserAsync(user.id));
     }
   }, [dispatch, user]);
 
