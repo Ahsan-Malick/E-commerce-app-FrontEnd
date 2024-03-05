@@ -7,7 +7,6 @@ import { selectCartSubTotal } from "../cart/cartSlice";
 
 function OrdersDetail() {
   const orderDetail = useSelector(selectOrderDetail);
-  const subTotal = useSelector(selectCartSubTotal);
   const check = true;
 
 

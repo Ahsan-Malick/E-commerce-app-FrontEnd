@@ -120,8 +120,6 @@ function App() {
   const user = useSelector(selectLoggedUsers);
   const subTotal = products.reduce((acc, curr) => acc + curr.totalPrice, 0);
 
-  // console.log({products});
-  // console.log({subTotal})
 
   useEffect(() => {
     const fetchData = async () => {

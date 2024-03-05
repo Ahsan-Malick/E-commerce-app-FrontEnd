@@ -3,8 +3,8 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import ProductList from './ProductList';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addtoCartAsync } from '../cart/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addtoCartAsync, selectCartItems } from '../cart/cartSlice';
 
 const user = {
   name: 'Tom Cook',
@@ -30,6 +30,10 @@ function classNames(...classes) {
 }
 
 export default function NavBar({children}) {
+
+  const cartItems = useSelector(selectCartItems);
+
+  const qty= cartItems.reduce((acc, iter)=>acc+iter.quantity,0);
 
   const handleSignOut =()=>{
     console.log('signed out')
@@ -85,7 +89,7 @@ export default function NavBar({children}) {
                       </button>
                       </Link>
                       <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-        1
+        {qty}
       </span>
                       
 
