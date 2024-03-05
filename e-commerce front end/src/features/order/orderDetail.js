@@ -18,12 +18,6 @@ console.log(myValue);
 
 useEffect(()=>{getOrderSum(orderDetail)},[]);
 
-  
-
-//   const [subTotal, setSubtotal]=useState(0);
-  
-  
-
   return (
    
     <>
