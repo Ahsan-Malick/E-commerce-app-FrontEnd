@@ -16,8 +16,12 @@ import ProductDetail from "./features/product/components/ProductDetail";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import Protected from "./features/auth/components/Protected";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLoggedUsers } from "./features/auth/AuthSlice";
-import { fetchCartByUserAsync } from "./features/cart/cartSlice";
+import { getUserAsync, selectLoggedUsers } from "./features/auth/AuthSlice";
+import {
+  fetchCartByUserAsync,
+  selectCartItems,
+  storeCartTotal,
+} from "./features/cart/cartSlice";
 import {
   fetchaddressebyidAsync,
   saveaddressesAsync,
@@ -33,6 +37,7 @@ import {
 
 import UserProfile from "./features/profile/profile";
 import Logout from "./pages/Logout";
+import OrderHistoryPage from "./pages/OrderHistoryPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -103,21 +108,39 @@ const router = createBrowserRouter([
       </Protected>
     ),
   },
+  {
+    path: "/OrderHistory",
+    element: <OrderHistoryPage></OrderHistoryPage>,
+  },
 ]);
 
 function App() {
-  // const orderData = useContext()
-
+  const products = useSelector(selectCartItems);
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedUsers);
+  const subTotal = products.reduce((acc, curr) => acc + curr.totalPrice, 0);
+
+  // console.log({products});
+  // console.log({subTotal})
 
   useEffect(() => {
-    if (user) {
-      dispatch(fetchCartByUserAsync(user.id));
-      dispatch(fetchaddressebyidAsync(user.id));
-      dispatch(getorderdetailbyuserAsync(user.id));
-    }
-  }, [dispatch, user]);
+    const fetchData = async () => {
+      if (user) {
+        try {
+          await Promise.all([
+            dispatch(fetchCartByUserAsync()),
+            dispatch(getUserAsync()),
+            dispatch(getorderdetailbyuserAsync()),
+          ]);
+          dispatch(storeCartTotal(subTotal));
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    };
+  
+    fetchData();
+  }, [dispatch, user, subTotal]);
 
   return (
     <div className="App">
