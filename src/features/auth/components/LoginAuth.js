@@ -36,7 +36,7 @@ export default function LoginAuth() {
               alt="Your Company"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Sign in to your account
+              Sign in to your account NOW
             </h2>
           </div>
 
