@@ -77,7 +77,8 @@ export const userSlice = createSlice({
       .addCase(checkUserAsync.rejected, (state, action) => {
         state.status = "fulfilled";
         state.error = action.error;
-      }).addCase(getUserAsync.pending, (state, action) => {
+      })
+      .addCase(getUserAsync.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(getUserAsync.fulfilled, (state, action) => {
