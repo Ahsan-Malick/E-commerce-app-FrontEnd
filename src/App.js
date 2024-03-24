@@ -38,6 +38,7 @@ import {
 import UserProfile from "./features/profile/profile";
 import Logout from "./pages/Logout";
 import OrderHistoryPage from "./pages/OrderHistoryPage";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -112,6 +113,7 @@ const router = createBrowserRouter([
     path: "/OrderHistory",
     element: <OrderHistoryPage></OrderHistoryPage>,
   },
+
 ]);
 
 function App() {

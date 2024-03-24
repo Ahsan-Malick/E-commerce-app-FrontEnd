@@ -5,17 +5,17 @@ import { FetchProductsByFilters } from "./productListAPI";
 import {
   ChevronRightIcon,
   ChevronLeftIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+  XIcon,
+} from "@heroicons/react/outline";
 import {
   ChevronDownIcon,
-  FunnelIcon,
+  FilterIcon,
   MinusIcon,
   PlusIcon,
-  Squares2X2Icon,
+  ViewGridIcon,
   Bars3Icon,
   BellIcon,
-} from "@heroicons/react/20/solid";
+} from "@heroicons/react/solid";
 
 import {
   decrement,
@@ -374,7 +374,7 @@ export default function ProductList() {
                         onClick={() => setMobileFiltersOpen(false)}
                       >
                         <span className="sr-only">Close menu</span>
-                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                        <XIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
                     </div>
 
@@ -518,7 +518,7 @@ export default function ProductList() {
                   className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
                 >
                   <span className="sr-only">View grid</span>
-                  <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
+                  <ViewGridIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
                 <button
                   type="button"
@@ -526,7 +526,7 @@ export default function ProductList() {
                   onClick={() => setMobileFiltersOpen(true)}
                 >
                   <span className="sr-only">Filters</span>
-                  <FunnelIcon className="h-5 w-5" aria-hidden="true" />
+                  <FilterIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
               </div>
             </div>

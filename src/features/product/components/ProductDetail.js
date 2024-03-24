@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StarIcon } from "@heroicons/react/20/solid";
+import { StarIcon } from "@heroicons/react/solid";
 import { RadioGroup } from "@headlessui/react";
 import { selectAllProducts, selectOneProduct } from "../productListSlice";
 import { useParams } from "react-router-dom";

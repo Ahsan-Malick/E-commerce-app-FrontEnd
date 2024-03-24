@@ -12,6 +12,32 @@ export function CreateUser(userData) {
   });
 }
 
+export function UpdateUsername(userData) {
+  return new Promise(async (resolve) => {
+    const response = await fetch("http://localhost:8080/user", {
+      method: "PATCH",
+      body: JSON.stringify(userData),
+      headers: {"Content-Type":"application/json"}
+    });
+
+    const data = await response.json();
+    resolve({ data });
+  });
+}
+
+export function UpdateUserPassword(userData) {
+  return new Promise(async (resolve) => {
+    const response = await fetch("http://localhost:8080/user", {
+      method: "PATCH",
+      body: JSON.stringify(userData),
+      headers: {"Content-Type":"application/json"}
+    });
+
+    const data = await response.json();
+    resolve({ data });
+  });
+}
+
 
 export function getUser() {
   return new Promise(async (resolve) => {

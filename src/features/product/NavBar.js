@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { MenuIcon, ShoppingCartIcon, XIcon } from '@heroicons/react/outline'
 import ProductList from './ProductList';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -138,9 +138,9 @@ export default function NavBar({children}) {
                       <span className="absolute -inset-0.5" />
                       <span className="sr-only">Open main menu</span>
                       {open ? (
-                        <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                        <XIcon className="block h-6 w-6" aria-hidden="true" />
                       ) : (
-                        <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                        <MenuIcon className="block h-6 w-6" aria-hidden="true" />
                       )}
                     </Disclosure.Button>
                   </div>

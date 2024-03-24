@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CheckUser, CreateUser, getUser } from "./AuthAPI";
+import { CheckUser, CreateUser, UpdateUserPassword, UpdateUsername, getUser } from "./AuthAPI";
 import { productSliceAPI } from "./AuthAPI";
 
 const initialState = {
@@ -18,6 +18,23 @@ export const createUserAsync = createAsyncThunk(
   "users/createUser",
   async (userData) => {
     const response = await CreateUser(userData);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+export const updateUsernameAsync = createAsyncThunk(
+  "users/UpdateUsername",
+  async (userData) => {
+    const response = await UpdateUsername(userData);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+
+export const updateUserPasswordAsync = createAsyncThunk(
+  "users/UpdatePassword",
+  async (userData) => {
+    const response = await UpdateUserPassword(userData);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -86,7 +103,19 @@ export const userSlice = createSlice({
         state.UserInfo = action.payload;
       })
       .addCase(getUserAsync.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.error;
+      }).addCase(updateUsernameAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
+        state.UserInfo = action.payload;
+      }).addCase(updateUsernameAsync.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.error;
+      }).addCase(updateUserPasswordAsync.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.UserInfo = action.payload;
+      }).addCase(updateUserPasswordAsync.rejected, (state, action) => {
+        state.status = "rejected";
         state.error = action.error;
       });
   },
